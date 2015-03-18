@@ -36,5 +36,12 @@ class TaskRepository {
     class func save(task: Task) {
         AppDelegate.instance().saveContext()
     }
+    
+    class func delete(task: Task) {
+        let objectContext = AppDelegate.instance().managedObjectContext!
+        
+        objectContext.deleteObject(task)
+        objectContext.save(nil)
+    }
 
 }

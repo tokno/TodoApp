@@ -85,12 +85,11 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        switch editingStyle {
-        case .Delete:
-            println("Delete")
-        default:
-            println("other")
-        }
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as TaskListTableCell
+        let task = cell.task!
+        TaskRepository.delete(task)
+        
+        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .None)
     }
-
+    
 }
