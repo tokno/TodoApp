@@ -25,6 +25,10 @@ class Task: NSManagedObject {
         return (done_at != nil) ? .Completed : .Uncompleted
     }
     
+    func save() {
+        TaskRepository.save(self)
+    }
+    
     enum State {
         case Completed
         case Uncompleted

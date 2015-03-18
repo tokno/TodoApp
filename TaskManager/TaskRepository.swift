@@ -32,5 +32,9 @@ class TaskRepository {
         
         return task
     }
+    
+    class func save(task: Task) {
+        AppDelegate.instance().saveContext()
+    }
 
 }

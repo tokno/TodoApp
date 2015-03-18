@@ -24,14 +24,21 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         super.didReceiveMemoryWarning()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        println("viewWillAppear")
+        taskTable.reloadData()
+    }
+    
     @IBAction func unwind(segue: UIStoryboardSegue) {
-        self.reloadInputViews()
+        println("unwind")
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == nil {
             return
         }
+        
+        println(segue.identifier)
         
         switch segue.identifier! {
         case "createNewTask":
@@ -64,12 +71,13 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
             task.complete(NSDate())
         }
         
+        task.save()
+        
         cell.showAs(task.completeStatus)
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // TODO 削除実装後trueに
-        return false
+        return true
     }
     
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
@@ -77,8 +85,12 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        // TODO 削除処理実装
-        println("Delete")
+        switch editingStyle {
+        case .Delete:
+            println("Delete")
+        default:
+            println("other")
+        }
     }
 
 }
