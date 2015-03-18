@@ -17,7 +17,6 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         taskTable.delegate = self
         taskTable.dataSource = self
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -26,6 +25,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     
     override func viewWillAppear(animated: Bool) {
         println("viewWillAppear")
+        self.becomeFirstResponder()
         taskTable.reloadData()
     }
     
@@ -49,6 +49,29 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
+    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
+        switch motion {
+        case .MotionShake:
+            println("Shake gusture detected.")
+            deleteDoneTasks()
+        default:
+            println()
+        }
+    }
+    
+    func deleteDoneTasks() {
+        let tasks: [Task] = category.tasks.allObjects.map {
+            $0 as Task
+        }
+        
+        let doneTasks = tasks.filter { (task: Task) in
+            task.completeStatus == .Completed
+        }
+        
+        TaskRepository.delete(doneTasks)
+        taskTable.reloadData()
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return category.tasks.count
     }
@@ -64,6 +87,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         let cell = tableView.cellForRowAtIndexPath(indexPath) as TaskListTableCell
         let task = cell.task!
         
+        // 完了・未完了の切り替え
         switch task.completeStatus {
         case .Completed:
             task.uncomplete()
@@ -87,6 +111,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as TaskListTableCell
         let task = cell.task!
+        
         TaskRepository.delete(task)
         
         tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .None)

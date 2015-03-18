@@ -4,7 +4,7 @@ import CoreData
 class CategoryRepository {
     
     class func all() -> [Category] {
-        println("CategoryRepository#all")
+        println("CategoryRepository::all")
 
         let objectContext = AppDelegate.instance().managedObjectContext!
         let entityDiscription = NSEntityDescription.entityForName("Category", inManagedObjectContext: objectContext)
@@ -19,7 +19,7 @@ class CategoryRepository {
     }
     
     class func newCategory(name: String) -> Category {
-        println("CategoryRepository#newCategory")
+        println("CategoryRepository::newCategory")
 
         let objectContext = AppDelegate.instance().managedObjectContext!
         let newCategory = NSEntityDescription.insertNewObjectForEntityForName("Category", inManagedObjectContext: objectContext) as Category

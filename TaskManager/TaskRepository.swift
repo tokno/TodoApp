@@ -4,7 +4,7 @@ import CoreData
 class TaskRepository {
 
     class func all() -> [Task] {
-        println("TaskRepository#all")
+        println("TaskRepository::all")
         
         let objectContext = AppDelegate.instance().managedObjectContext!
         let entityDiscription = NSEntityDescription.entityForName("Task", inManagedObjectContext: objectContext)
@@ -19,7 +19,7 @@ class TaskRepository {
     }
     
     class func newTask(name: String, _ category: Category) -> Task {
-        println("TaskRepository#newTask")
+        println("TaskRepository::newTask")
 
         let objectContext = AppDelegate.instance().managedObjectContext!
         let task = NSEntityDescription.insertNewObjectForEntityForName("Task", inManagedObjectContext: objectContext) as Task
@@ -38,9 +38,16 @@ class TaskRepository {
     }
     
     class func delete(task: Task) {
+        delete([task])
+    }
+    
+    class func delete(tasks: [Task]) {
         let objectContext = AppDelegate.instance().managedObjectContext!
         
-        objectContext.deleteObject(task)
+        for task in tasks {
+            objectContext.deleteObject(task)
+        }
+        
         objectContext.save(nil)
     }
 
